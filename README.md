@@ -1,5 +1,3 @@
-# TPW2024
- 
 # Concurrent programming
 
 ## Working Group
