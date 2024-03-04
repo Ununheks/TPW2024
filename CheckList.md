@@ -1,6 +1,4 @@
-# TPW2024
- 
-## Create a repository checklist
+# TPW2024 Etap 0
 
 - [ ] the task provides required feedback and has been submitted (needs grading)
 - [ ] the ability to clone the repository to the teacher's computer
