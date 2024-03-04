@@ -1,2 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+namespace TPW2024
+{
+     class Program
+     {
+         static void Main(string[] args)
+         {
+             SimpleClass obj = new SimpleClass();
+             string result = obj.Hello();
+             Console.WriteLine(result);
+         }
+     }
+}
