@@ -1,5 +1,3 @@
-using TPW2024;
-
 namespace TPW2024_TEST
 {
     [TestClass]
@@ -8,7 +6,7 @@ namespace TPW2024_TEST
         [TestMethod]
         public void TestHelloMethod()
         {
-            SimpleClass obj = new SimpleClass();
+            TPW2024.SimpleClass obj = new TPW2024.SimpleClass();
             string result = obj.Hello();
             Assert.AreEqual("Hello World", result);
         }
@@ -16,7 +14,7 @@ namespace TPW2024_TEST
         [TestMethod]
         public void TestAddTwoInts()
         {
-            SimpleClass obj = new SimpleClass();
+            TPW2024.SimpleClass obj = new TPW2024.SimpleClass();
             int result = obj.AddTwoInts(2, 5);
             Assert.AreEqual(7, result);
         }
@@ -24,7 +22,7 @@ namespace TPW2024_TEST
         [TestMethod]
         public void TestSayTrue()
         {
-            SimpleClass obj = new SimpleClass();
+            TPW2024.SimpleClass obj = new TPW2024.SimpleClass();
             bool result = obj.SayTrue();
             Assert.IsTrue(result);
         }
