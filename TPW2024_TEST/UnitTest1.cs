@@ -1,5 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-namespace TPW2024
+using TPW2024;
+
+namespace TPW2024_TEST
 {
     [TestClass]
     public class TestSimpleClass
@@ -16,7 +17,7 @@ namespace TPW2024
         public void TestAddTwoInts()
         {
             SimpleClass obj = new SimpleClass();
-            int result = obj.AddTwoInts(2,5);
+            int result = obj.AddTwoInts(2, 5);
             Assert.AreEqual(7, result);
         }
 
