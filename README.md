@@ -4,5 +4,5 @@
 
 | Name Surname (initials) | GUID                                     |
 | ----------------------- | ---------------------------------------- |
-| Krystian Błaszczyk      | `{FD9D086C-532F-4AAC-BB99-69D7798837D8}` |
-| Milena Yakhno           | `{44FBFCF5-4430-4964-878D-1867DC679E0D}` |
+| Krystian Błaszczyk      | `{7B6A260F-A2B9-4F93-BE80-F6CEB4F55AD4}` |
+| Milena Yakhno           | `{E422358E-E5E9-48F2-8B82-457F381F8DAB}` |
