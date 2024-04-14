@@ -1,15 +1,21 @@
-﻿using ViewModel;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ViewModel;
 
-class Program
+namespace View
 {
-    static void Main(string[] args)
+    class Program
     {
-        BallSimulationViewModel viewModel = new BallSimulationViewModel();
-
-        // Initialize table and spawn balls...
-
-        Console.WriteLine("Press any key to exit...");
-        Console.ReadKey();
+        [STAThread]
+        static void Main(string[] args)
+        {
+            var viewModel = new BallSimulationViewModel();
+            var view = new View.MainView();
+            view.DataContext = viewModel; // Set the ViewModel as the DataContext
+            view.ShowDialog(); // Show the view as a dialog
+        }
     }
 }

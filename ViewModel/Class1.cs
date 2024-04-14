@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Numerics;
+using Logic;
 using Model;
 
 namespace ViewModel
@@ -37,7 +38,7 @@ namespace ViewModel
 
         public BallSimulationViewModel()
         {
-            _logicService = new LogicService(new DataService());
+            _logicService = new LogicService();
             _ballViewModels = new List<BallViewModel>();
         }
 
