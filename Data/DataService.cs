@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Data
 {
@@ -8,6 +9,7 @@ namespace Data
         {
             return new Ball(pos, velocity);
         }
+
         public override Vector2 GetBallPosition(object ball)
         {
             if (ball is Ball)
@@ -27,6 +29,19 @@ namespace Data
             {
                 Ball castedBall = (Ball)ball;
                 return castedBall.Velocity;
+            }
+            else
+            {
+                throw new ArgumentException("The provided object is not a valid ball.");
+            }
+        }
+
+        public override void SetBallVelocity(object ball, Vector2 newVelocity)
+        {
+            if (ball is Ball)
+            {
+                Ball castedBall = (Ball)ball;
+                castedBall.Velocity = newVelocity;
             }
             else
             {

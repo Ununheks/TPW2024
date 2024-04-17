@@ -7,11 +7,10 @@ namespace Data
         private Vector2 _pos;
         private Vector2 _velocity;
 
-        public Vector2 Position { get => _pos; set => _pos = value; }
+        public Vector2 Position { get => _pos;}
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
-        public delegate void PositionUpdatedEventHandler();
-        public event PositionUpdatedEventHandler PositionUpdated;
+        public event EventHandler PositionUpdated;
 
         public Ball(Vector2 pos, Vector2 velocity)
         {
@@ -37,7 +36,7 @@ namespace Data
 
         protected virtual void OnPositionUpdated()
         {
-            PositionUpdated?.Invoke();
+            PositionUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 }
