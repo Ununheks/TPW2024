@@ -12,17 +12,17 @@ namespace LogicTest
             MockDataAPI mockDataAPI = new MockDataAPI();
             LogicAPI logicAPI = LogicAPI.CreateLogicService(mockDataAPI);
 
-            logicAPI.CreateTable(100, 200);
+            Table table = (Table)logicAPI.CreateTable(100, 200);
             logicAPI.SpawnBalls(20, 2);
 
-            Assert.AreEqual(100, logicAPI.GetTableDimensions().X, "Table width is incorrect.");
-            Assert.AreEqual(200, logicAPI.GetTableDimensions().Y, "Table height is incorrect.");
+            Assert.AreEqual(100, table.Width, "Table width is incorrect.");
+            Assert.AreEqual(200, table.Height, "Table height is incorrect.");
 
-            Assert.AreEqual(20, logicAPI.GetBallData().Count, "Incorrect number of balls spawned.");
+            Assert.AreEqual(20, table.Balls.Count, "Incorrect number of balls spawned.");
         }
     }
 
-    // Mock implementation of DataAPI for testing purposes
+
     class MockDataAPI : Data.DataAPI
     {
         public override object CreateBall(Vector2 pos, Vector2 velocity, Action callback = null)

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Data
 {
@@ -8,6 +8,7 @@ namespace Data
     {
         private Vector2 _pos;
         private Vector2 _velocity;
+        private Timer _moveTimer;
 
         public Vector2 Position { get => _pos; }
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
@@ -23,17 +24,10 @@ namespace Data
             if (callback != null)
                 PositionUpdated += (sender, args) => callback();
 
-            Task.Run(async () =>
-            {
-                while (true)
-                {
-                    Update();
-                    await Task.Delay(1000);
-                }
-            });
+            _moveTimer = new Timer(Update, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
 
-        private void Update()
+        private void Update(object state)
         {
             Console.WriteLine($"Ball position: {_pos}");
             _pos += _velocity;
