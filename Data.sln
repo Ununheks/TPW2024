@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{B1FFCFC7-CF04-4638-B002-26857E5057DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTest", "DataTest\DataTest.csproj", "{F6381487-6E2B-4E94-B41C-BD18E3EF2CED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B1FFCFC7-CF04-4638-B002-26857E5057DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1FFCFC7-CF04-4638-B002-26857E5057DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1FFCFC7-CF04-4638-B002-26857E5057DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6381487-6E2B-4E94-B41C-BD18E3EF2CED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6381487-6E2B-4E94-B41C-BD18E3EF2CED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6381487-6E2B-4E94-B41C-BD18E3EF2CED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6381487-6E2B-4E94-B41C-BD18E3EF2CED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
