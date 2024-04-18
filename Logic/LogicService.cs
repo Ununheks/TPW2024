@@ -34,6 +34,8 @@ namespace Logic
 
             float maxDisplacement = radius * 2;
 
+            Action checkCollisionsAction = CheckCollisions;
+
             for (int row = 0; row < numRows; row++)
             {
                 for (int col = 0; col < numCols; col++)
@@ -41,7 +43,7 @@ namespace Logic
                     float x = (float)(random.NextDouble() * maxDisplacement) + col * (_table.Width - maxDisplacement) / (numCols - 1);
                     float y = (float)(random.NextDouble() * maxDisplacement) + row * (_table.Height - maxDisplacement) / (numRows - 1);
 
-                    _table.AddBall(_dataAPI.CreateBall(new Vector2(x, y), GetRandomVelocity(random)));
+                    _table.AddBall(_dataAPI.CreateBall(new Vector2(x, y), GetRandomVelocity(random), checkCollisionsAction));
                 }
             }
         }
@@ -64,7 +66,7 @@ namespace Logic
                 }
                 if (ballPosition.Y - _ballRadius <= 0 || ballPosition.Y + _ballRadius >= _table.Height)
                 {
-                    _dataAPI.SetBallVelocity(ball, new Vector2(-ballVelocity.X, -ballVelocity.Y));
+                    _dataAPI.SetBallVelocity(ball, new Vector2(ballVelocity.X, -ballVelocity.Y));
                 }
             }
         }

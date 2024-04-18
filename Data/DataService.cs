@@ -5,9 +5,9 @@ namespace Data
 {
     internal class DataService : DataAPI
     {
-        public override object CreateBall(Vector2 pos, Vector2 velocity)
+        public override object CreateBall(Vector2 pos, Vector2 velocity, Action callback)
         {
-            return new Ball(pos, velocity);
+            return new Ball(pos, velocity, callback);
         }
 
         public override Vector2 GetBallPosition(object ball)
