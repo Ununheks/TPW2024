@@ -1,4 +1,5 @@
 ﻿using Data;
+using System;
 using System.Numerics;
 
 namespace Logic
@@ -14,20 +15,24 @@ namespace Logic
             _dataAPI = dataAPI ?? DataAPI.CreateDataService();
         }
 
-        public override object CreateTable(float width, float height)
+        public override void Start(int ballAmount, float ballRadius, float tableWidth, float tableHeight)
         {
-            _table = new Table(width, height);
+            CreateTable(tableWidth, tableHeight);
+            SpawnBalls(ballAmount, ballRadius);
+        }
+
+        public override object GetTableInfo()
+        {
             return _table;
         }
 
-        public override void SpawnBalls(int amount, float radius)
+        private void CreateTable(float width, float height)
         {
-            if (_table == null)
-            {
-                Console.WriteLine("Table is not created yet.");
-                return;
-            }
+            _table = new Table(width, height);
+        }
 
+        private void SpawnBalls(int amount, float radius)
+        {
             Random random = new Random();
 
             int numRows = (int)Math.Ceiling(Math.Sqrt(amount));
@@ -63,7 +68,7 @@ namespace Logic
                 Vector2 ballVelocity = _dataAPI.GetBallVelocity(ball);
                 if (ballPosition.X - _ballRadius <= 0 || ballPosition.X + _ballRadius >= _table.Width)
                 {
-                    _dataAPI.SetBallVelocity(ball,new Vector2(-ballVelocity.X, ballVelocity.Y));
+                    _dataAPI.SetBallVelocity(ball, new Vector2(-ballVelocity.X, ballVelocity.Y));
                 }
                 if (ballPosition.Y - _ballRadius <= 0 || ballPosition.Y + _ballRadius >= _table.Height)
                 {

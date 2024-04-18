@@ -10,8 +10,8 @@ namespace Logic
             return new LogicService(dataAPI);
         }
 
-        public abstract object CreateTable(float width, float height);
-        public abstract void SpawnBalls(int amount, float radius);
+        public abstract void Start(int ballAmount, float ballRadius, float tableWidth, float tableHeight);
+        public abstract object GetTableInfo();
         public abstract void CheckCollisions();
     }
 }
