@@ -1,4 +1,5 @@
 ﻿using Data;
+using System.Numerics;
 
 namespace Logic
 {
@@ -10,7 +11,9 @@ namespace Logic
         }
 
         public abstract void CreateTable(float width, float height);
+        public abstract Vector2 GetTableDimensions();
         public abstract void SpawnBalls(int amount, float radius);
+        public abstract List<object> GetBallData();
         public abstract void CheckCollisions();
     }
 }

@@ -16,14 +16,14 @@ namespace DataTest
 
             DataAPI dataAPI = DataAPI.CreateDataService();
 
-            Ball ballFromDataService = (Ball)dataAPI.CreateBall(initialPosition, initialVelocity);
+            object ball = dataAPI.CreateBall(initialPosition, initialVelocity);
 
-            Assert.AreEqual(initialPosition, ballFromDataService.Position, "Initial position does not match.");
-            Assert.AreEqual(initialVelocity, ballFromDataService.Velocity, "Initial velocity does not match.");
+            Assert.AreEqual(initialPosition, dataAPI.GetBallPosition(ball), "Initial position does not match.");
+            Assert.AreEqual(initialVelocity, dataAPI.GetBallVelocity(ball), "Initial velocity does not match.");
 
-            dataAPI.SetBallVelocity(ballFromDataService, newVelocity);
+            dataAPI.SetBallVelocity(ball, newVelocity);
 
-            Assert.AreEqual(newVelocity, ballFromDataService.Velocity, "Updated velocity does not match.");
+            Assert.AreEqual(newVelocity, dataAPI.GetBallVelocity(ball), "Updated velocity does not match.");
         }
     }
 }

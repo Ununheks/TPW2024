@@ -19,6 +19,17 @@ namespace Logic
             _table = new Table(width, height);
         }
 
+        public override Vector2 GetTableDimensions()
+        {
+            if (_table == null)
+            {
+                Console.WriteLine("Table is not created yet.");
+                return Vector2.Zero;
+            }
+
+            return new Vector2(_table.Width, _table.Height);
+        }
+
         public override void SpawnBalls(int amount, float radius)
         {
             if (_table == null)
@@ -46,6 +57,16 @@ namespace Logic
                     _table.AddBall(_dataAPI.CreateBall(new Vector2(x, y), GetRandomVelocity(random), checkCollisionsAction));
                 }
             }
+        }
+
+        public override List<object> GetBallData()
+        {
+            if (_table == null)
+            {
+                throw new InvalidOperationException("Table is not created yet.");
+            }
+
+            return _table.Balls;
         }
 
         public override void CheckCollisions()
