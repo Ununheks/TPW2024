@@ -6,8 +6,8 @@ namespace Model
 {
     public interface IBall : INotifyPropertyChanged
     {
-        double Top { get; }
-        double Left { get; }
+        double Top { get; internal set; }
+        double Left { get; internal set; }
         double Diameter { get; }
     }
 
@@ -24,18 +24,11 @@ namespace Model
             return model;
         }
 
-        public abstract void Start();
-
-        #region IObservable
+        public abstract void Start(int ballCount);
 
         public abstract IDisposable Subscribe(IObserver<IBall> observer);
 
-        #endregion IObservable
-
-        #region IDisposable
-
         public abstract void Dispose();
 
-        #endregion IDisposable
     }
 }

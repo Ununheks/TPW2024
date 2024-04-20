@@ -1,6 +1,8 @@
 ﻿using Data;
+using Microsoft.VisualBasic;
 using System;
 using System.Numerics;
+using System.Threading;
 
 namespace Logic
 {
@@ -9,16 +11,43 @@ namespace Logic
         private DataAPI? _dataAPI;
         private Table _table;
         private float _ballRadius;
+        private Timer _updateTimer;
+
+
+        public event EventHandler<List<Vector2>> BallPositionsUpdated;
+
+        public override event EventHandler<List<Vector2>> OnBallPositionsUpdated;
+
+        private void RaiseBallPositionsUpdated(List<Vector2> positions)
+        {
+            OnBallPositionsUpdated?.Invoke(this, positions);
+        }
 
         public LogicService(DataAPI? dataAPI = null)
         {
             _dataAPI = dataAPI ?? DataAPI.CreateDataService();
         }
 
-        public override void Start(int ballAmount, float ballRadius, float tableWidth, float tableHeight)
+        public override void Start(int ballCount, float ballRadius, float tableWidth, float tableHeight)
         {
             CreateTable(tableWidth, tableHeight);
-            SpawnBalls(ballAmount, ballRadius);
+            SpawnBalls(ballCount, ballRadius);
+            _updateTimer = new Timer(UpdateBallPositions, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+        }
+
+        private void UpdateBallPositions(object state)
+        {
+            List<Vector2> positions = new List<Vector2>();
+
+            // Iterate through the balls and get their positions
+            foreach (var ball in _table.Balls)
+            {
+                Vector2 ballPosition = _dataAPI.GetBallPosition(ball);
+                positions.Add(ballPosition);
+            }
+
+            // Raise the BallPositionsUpdated event
+            RaiseBallPositionsUpdated(positions);
         }
 
         public override object GetTableInfo()

@@ -1,24 +1,24 @@
-﻿
+﻿using Logic;
+using System;
 using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Model
 {
     internal class ModelBall : IBall, IDisposable
     {
-        public ModelBall(double top, double left)
+        public ModelBall()
         {
-            TopBackingField = top;
-            LeftBackingField = left;
-            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            Top = 0;
+            Left = 0;
         }
-
-        #region IBall
 
         public double Top
         {
             get { return TopBackingField; }
-            private set
+            set
             {
                 if (TopBackingField == value)
                     return;
@@ -30,7 +30,7 @@ namespace Model
         public double Left
         {
             get { return LeftBackingField; }
-            private set
+            set
             {
                 if (LeftBackingField == value)
                     return;
@@ -38,46 +38,28 @@ namespace Model
                 RaisePropertyChanged();
             }
         }
-
         public double Diameter { get; internal set; }
-
-        #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion INotifyPropertyChanged
-
-        #endregion IBall
-
-        #region IDisposable
-
         public void Dispose()
         {
-            MoveTimer.Dispose();
+            UpdateTimer.Dispose();
         }
-
-        #endregion IDisposable
-
-        #region private
 
         private double TopBackingField;
         private double LeftBackingField;
-        private Timer MoveTimer;
-        private Random Random = new Random();
+        private Timer UpdateTimer;
 
         private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void Move(object state)
+        private void Update(object state)
         {
-            if (state != null)
-                throw new ArgumentOutOfRangeException(nameof(state));
-            Top = Top + (Random.NextDouble() - 0.5) * 10;
-            Left = Left + (Random.NextDouble() - 0.5) * 10;
+            Top = 0;
+            Left = 0;
         }
-
-        #endregion private
     }
 }

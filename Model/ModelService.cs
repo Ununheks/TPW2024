@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
 using Logic;
@@ -8,12 +10,25 @@ namespace Model
 {
     internal class PresentationModel : ModelAbstractApi
     {
-        public PresentationModel()
+        public ObservableCollection<IBall> Balls { get; } = new ObservableCollection<IBall>();
+        private LogicAPI _logicAPI;
+
+        public PresentationModel(LogicAPI? logicAPI = null)
         {
+            _logicAPI = logicAPI ?? LogicAPI.CreateLogicService();
+            _logicAPI.OnBallPositionsUpdated += UpdateBallPosition;
             eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
         }
 
-        #region ModelAbstractApi
+        private void UpdateBallPosition(object sender, List<Vector2> positions)
+        {
+            for (int i = 0; i < Math.Min(Balls.Count, positions.Count); i++)
+            {
+                IBall ball = Balls[i];
+                ball.Top = positions[i].Y;
+                ball.Left = positions[i].X; 
+            }
+        }
 
         public override void Dispose()
         {
@@ -26,31 +41,20 @@ namespace Model
             return eventObservable.Subscribe(x => observer.OnNext(x.EventArgs.Ball), ex => observer.OnError(ex), () => observer.OnCompleted());
         }
 
-        public override void Start()
+        public override void Start(int ballCount)
         {
-            Random random = new Random();
-            int ballNumber = random.Next(1, 10);
-            for (int i = 0; i < ballNumber; i++)
+            for (int i = 0; i < ballCount; i++)
             {
-                ModelBall newBall = new ModelBall(random.Next(100, 400 - 100), random.Next(100, 400 - 100)) { Diameter = 20 };
+                ModelBall newBall = new ModelBall() { Diameter = 20 };
                 Balls2Dispose.Add(newBall);
                 BallChanged?.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
             }
+            _logicAPI.Start(ballCount, 10, 400, 420);
         }
-
-        #endregion ModelAbstractApi
-
-        #region API
 
         public event EventHandler<BallChaneEventArgs> BallChanged;
 
-        #endregion API
-
-        #region private
-
         private IObservable<EventPattern<BallChaneEventArgs>> eventObservable = null;
         private List<IDisposable> Balls2Dispose = new List<IDisposable>();
-
-        #endregion private
     }
 }

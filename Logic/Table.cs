@@ -1,4 +1,6 @@
 ﻿
+using System.Numerics;
+
 namespace Logic
 {
     internal class Table
