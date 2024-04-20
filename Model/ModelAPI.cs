@@ -1,20 +1,41 @@
-﻿using Logic;
+﻿using System;
+using System.ComponentModel;
+using Logic;
 
 namespace Model
 {
-    public class ModelAPI
+    public interface IBall : INotifyPropertyChanged
     {
-        private LogicAPI _logic;
+        double Top { get; }
+        double Left { get; }
+        double Diameter { get; }
+    }
 
-        public ModelAPI()
+    public class BallChaneEventArgs : EventArgs
+    {
+        public IBall Ball { get; internal set; }
+    }
+
+    public abstract class ModelAbstractApi : IObservable<IBall>, IDisposable
+    {
+        public static ModelAbstractApi CreateApi()
         {
-            _logic = LogicAPI.CreateLogicService();
+            PresentationModel model = new PresentationModel();
+            return model;
         }
 
-        public void StartSimulation(int numberOfBalls)
-        {
-            // Start the simulation using the LogicAPI
-            _logic.Start(numberOfBalls, 30, 900, 600);
-        }
+        public abstract void Start();
+
+        #region IObservable
+
+        public abstract IDisposable Subscribe(IObserver<IBall> observer);
+
+        #endregion IObservable
+
+        #region IDisposable
+
+        public abstract void Dispose();
+
+        #endregion IDisposable
     }
 }

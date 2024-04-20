@@ -1,38 +1,40 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using GalaSoft.MvvmLight; 
 using GalaSoft.MvvmLight.Command; 
 using Model;
 
 namespace ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IDisposable
+
     {
-        private ModelAPI _model;
+        #region public API
 
-        private int _numberOfBalls;
-
-        public int NumberOfBalls
+        public MainWindowViewModel()
         {
-            get => _numberOfBalls;
-            set
-            {
-                _numberOfBalls = value;
-                RaisePropertyChanged(nameof(NumberOfBalls));
-            }
+            ModelLayer = ModelAbstractApi.CreateApi();
+            IDisposable observer = ModelLayer.Subscribe<IBall>(x => Balls.Add(x));
+            ModelLayer.Start();
         }
 
-        public ICommand StartSimulationCommand { get; }
+        public ObservableCollection<IBall> Balls { get; } = new ObservableCollection<IBall>();
 
-        public MainViewModel()
+        #endregion public API
+
+        #region IDisposable
+
+        public void Dispose()
         {
-            _model = new ModelAPI();
-            StartSimulationCommand = new RelayCommand(StartSimulation);
+            ModelLayer.Dispose();
         }
 
-        private void StartSimulation()
-        {
-            // Start the simulation using the ModelAPI
-            _model.StartSimulation(NumberOfBalls);
-        }
+        #endregion IDisposable
+
+        #region private
+
+        private ModelAbstractApi ModelLayer;
+
+        #endregion private
     }
 }
