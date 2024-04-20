@@ -13,14 +13,11 @@ namespace Logic
         private float _ballRadius;
         private Timer _updateTimer;
 
-
-        public event EventHandler<List<Vector2>> BallPositionsUpdated;
-
-        public override event EventHandler<List<Vector2>> OnBallPositionsUpdated;
+        public override event EventHandler<List<Vector2>> OnBallsPositionsUpdated;
 
         private void RaiseBallPositionsUpdated(List<Vector2> positions)
         {
-            OnBallPositionsUpdated?.Invoke(this, positions);
+            OnBallsPositionsUpdated?.Invoke(this, positions);
         }
 
         public LogicService(DataAPI? dataAPI = null)
@@ -78,7 +75,7 @@ namespace Logic
                     float x = (float)(random.NextDouble() * maxDisplacement) + col * (_table.Width - maxDisplacement) / (numCols - 1);
                     float y = (float)(random.NextDouble() * maxDisplacement) + row * (_table.Height - maxDisplacement) / (numRows - 1);
 
-                    _table.AddBall(_dataAPI.CreateBall(new Vector2(x, y), GetRandomVelocity(random), checkCollisionsAction));
+                    _table.AddBall(_dataAPI.CreateBall(new Vector2(x, y), GetRandomVelocity(random) * 5, checkCollisionsAction));
                 }
             }
         }

@@ -10,23 +10,22 @@ namespace Model
 {
     internal class PresentationModel : ModelAbstractApi
     {
-        public ObservableCollection<IBall> Balls { get; } = new ObservableCollection<IBall>();
         private LogicAPI _logicAPI;
+        private List<ModelBall> _ballsList = new List<ModelBall>();
 
         public PresentationModel(LogicAPI? logicAPI = null)
         {
             _logicAPI = logicAPI ?? LogicAPI.CreateLogicService();
-            _logicAPI.OnBallPositionsUpdated += UpdateBallPosition;
+            _logicAPI.OnBallsPositionsUpdated += UpdateBallsPosition;
             eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
         }
 
-        private void UpdateBallPosition(object sender, List<Vector2> positions)
+        private void UpdateBallsPosition(object sender, List<Vector2> positions)
         {
-            for (int i = 0; i < Math.Min(Balls.Count, positions.Count); i++)
+            for (int i = 0; i < Math.Min(_ballsList.Count, positions.Count); i++)
             {
-                IBall ball = Balls[i];
-                ball.Top = positions[i].Y;
-                ball.Left = positions[i].X; 
+                ModelBall ball = _ballsList[i];
+                ball.UpdatePosition(positions[i]);
             }
         }
 
@@ -47,6 +46,7 @@ namespace Model
             {
                 ModelBall newBall = new ModelBall() { Diameter = 20 };
                 Balls2Dispose.Add(newBall);
+                _ballsList.Add(newBall); // Add the ball to the list
                 BallChanged?.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
             }
             _logicAPI.Start(ballCount, 10, 400, 420);

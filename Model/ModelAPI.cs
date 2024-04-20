@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Logic;
 
@@ -6,8 +7,8 @@ namespace Model
 {
     public interface IBall : INotifyPropertyChanged
     {
-        double Top { get; internal set; }
-        double Left { get; internal set; }
+        double Top { get; }
+        double Left { get; }
         double Diameter { get; }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -13,9 +14,12 @@ namespace ViewModel
         private int _ballCount;
         private string _ballCountText;
 
+        public ObservableCollection<IBall> Balls { get; } = new ObservableCollection<IBall>();
+
         public MainWindowViewModel()
         {
             _modelLayer = ModelAbstractApi.CreateApi();
+            IDisposable observer = _modelLayer.Subscribe<IBall>(x => Balls.Add(x));
             StartCommand = new RelayCommand(Start);
         }
 

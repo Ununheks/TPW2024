@@ -18,7 +18,7 @@ namespace Model
         public double Top
         {
             get { return TopBackingField; }
-            set
+            private set
             {
                 if (TopBackingField == value)
                     return;
@@ -30,7 +30,7 @@ namespace Model
         public double Left
         {
             get { return LeftBackingField; }
-            set
+            private set
             {
                 if (LeftBackingField == value)
                     return;
@@ -44,22 +44,20 @@ namespace Model
 
         public void Dispose()
         {
-            UpdateTimer.Dispose();
         }
 
         private double TopBackingField;
         private double LeftBackingField;
-        private Timer UpdateTimer;
 
         private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void Update(object state)
+        public void UpdatePosition(Vector2 newPosition)
         {
-            Top = 0;
-            Left = 0;
+            Top = newPosition.Y;
+            Left = newPosition.X;
         }
     }
 }
