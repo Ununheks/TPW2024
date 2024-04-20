@@ -8,16 +8,16 @@ using Logic;
 
 namespace Model
 {
-    internal class PresentationModel : ModelAbstractApi
+    internal class ModelService : ModelAPI
     {
         private LogicAPI _logicAPI;
         private List<ModelBall> _ballsList = new List<ModelBall>();
 
-        public PresentationModel(LogicAPI? logicAPI = null)
+        public ModelService(LogicAPI? logicAPI = null)
         {
             _logicAPI = logicAPI ?? LogicAPI.CreateLogicService();
             _logicAPI.OnBallsPositionsUpdated += UpdateBallsPosition;
-            eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
+            eventObservable = Observable.FromEventPattern<BallChangeEventArgs>(this, "BallChanged");
         }
 
         private void UpdateBallsPosition(object sender, List<Vector2> positions)
@@ -47,14 +47,14 @@ namespace Model
                 ModelBall newBall = new ModelBall() { Diameter = 20 };
                 Balls2Dispose.Add(newBall);
                 _ballsList.Add(newBall); // Add the ball to the list
-                BallChanged?.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
+                BallChanged?.Invoke(this, new BallChangeEventArgs() { Ball = newBall });
             }
-            _logicAPI.Start(ballCount, 10, 400, 420);
+            _logicAPI.Start(ballCount, 20, 400, 420);
         }
 
-        public event EventHandler<BallChaneEventArgs> BallChanged;
+        public event EventHandler<BallChangeEventArgs> BallChanged;
 
-        private IObservable<EventPattern<BallChaneEventArgs>> eventObservable = null;
+        private IObservable<EventPattern<BallChangeEventArgs>> eventObservable = null;
         private List<IDisposable> Balls2Dispose = new List<IDisposable>();
     }
 }

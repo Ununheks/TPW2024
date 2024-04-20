@@ -12,16 +12,16 @@ namespace Model
         double Diameter { get; }
     }
 
-    public class BallChaneEventArgs : EventArgs
+    public class BallChangeEventArgs : EventArgs
     {
         public IBall Ball { get; internal set; }
     }
 
-    public abstract class ModelAbstractApi : IObservable<IBall>, IDisposable
+    public abstract class ModelAPI : IObservable<IBall>, IDisposable
     {
-        public static ModelAbstractApi CreateApi()
+        public static ModelAPI CreateService()
         {
-            PresentationModel model = new PresentationModel();
+            ModelService model = new ModelService();
             return model;
         }
 
@@ -30,6 +30,5 @@ namespace Model
         public abstract IDisposable Subscribe(IObserver<IBall> observer);
 
         public abstract void Dispose();
-
     }
 }

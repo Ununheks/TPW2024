@@ -10,7 +10,7 @@ namespace ViewModel
 {
     public class MainWindowViewModel : ViewModelBase, IDisposable
     {
-        private ModelAbstractApi _modelLayer;
+        private ModelAPI _modelLayer;
         private int _ballCount;
         private string _ballCountText;
 
@@ -18,7 +18,7 @@ namespace ViewModel
 
         public MainWindowViewModel()
         {
-            _modelLayer = ModelAbstractApi.CreateApi();
+            _modelLayer = ModelAPI.CreateService();
             IDisposable observer = _modelLayer.Subscribe<IBall>(x => Balls.Add(x));
             StartCommand = new RelayCommand(Start);
         }
@@ -39,7 +39,14 @@ namespace ViewModel
 
         private void Start()
         {
-            _modelLayer.Start(_ballCount);
+            if (int.TryParse(BallCountText, out _ballCount) && _ballCount > 0)
+            {
+                _modelLayer.Start(_ballCount);
+            }
+            else
+            {
+
+            }
         }
 
         public void Dispose()
@@ -48,6 +55,3 @@ namespace ViewModel
         }
     }
 }
-
-
-

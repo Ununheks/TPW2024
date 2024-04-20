@@ -24,7 +24,7 @@ namespace Data
             if (callback != null)
                 PositionUpdated += (sender, args) => callback();
 
-            _moveTimer = new Timer(Update, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            _moveTimer = new Timer(Update, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
         }
 
         private void Update(object state)

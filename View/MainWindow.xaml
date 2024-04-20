@@ -31,7 +31,7 @@
             </ItemsControl>
         </Border>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <TextBox Width="100" Margin="5" Text="{Binding BallCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100" Margin="5" Text="{Binding BallCountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="Start" Command="{Binding StartCommand}" Width="80" Margin="5"/>
         </StackPanel>
     </Grid>

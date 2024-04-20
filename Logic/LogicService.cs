@@ -29,7 +29,7 @@ namespace Logic
         {
             CreateTable(tableWidth, tableHeight);
             SpawnBalls(ballCount, ballRadius);
-            _updateTimer = new Timer(UpdateBallPositions, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            _updateTimer = new Timer(UpdateBallPositions, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
         }
 
         private void UpdateBallPositions(object state)
