@@ -29,7 +29,6 @@ namespace Data
 
         private void Update(object state)
         {
-            Console.WriteLine($"Ball position: {_pos}");
             _pos += _velocity;
             OnPositionUpdated();
         }
