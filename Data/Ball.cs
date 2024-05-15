@@ -13,16 +13,13 @@ namespace Data
         public Vector2 Position { get => _pos; }
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
-        public event EventHandler PositionUpdated;
+        private Action<object,Vector2, Vector2> _positionUpdatedCallback;
 
-        public Ball(Vector2 pos, Vector2 velocity, Action callback = null)
+        public Ball(Vector2 pos, Vector2 velocity, Action<object,Vector2, Vector2> positionUpdatedCallback = null)
         {
             _pos = pos;
             _velocity = velocity;
-
-            // Subscribe the positionUpdatedCallback delegate to the PositionUpdated event
-            if (callback != null)
-                PositionUpdated += (sender, args) => callback();
+            _positionUpdatedCallback = positionUpdatedCallback;
 
             _moveTimer = new Timer(Update, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
         }
@@ -30,12 +27,7 @@ namespace Data
         private void Update(object state)
         {
             _pos += _velocity;
-            OnPositionUpdated();
-        }
-
-        protected virtual void OnPositionUpdated()
-        {
-            PositionUpdated?.Invoke(this, EventArgs.Empty);
+            _positionUpdatedCallback?.Invoke(this, _pos, _velocity);
         }
     }
 }

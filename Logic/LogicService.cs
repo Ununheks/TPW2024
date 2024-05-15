@@ -36,11 +36,13 @@ namespace Logic
         {
             List<Vector2> positions = new List<Vector2>();
 
-            // Iterate through the balls and get their positions
-            foreach (var ball in _table.Balls)
+            // Create a snapshot of the balls list
+            List<(object Ball, Vector2 Position, Vector2 Velocity)> ballsSnapshot = new List<(object Ball, Vector2 Position, Vector2 Velocity)>(_table.Balls);
+
+            // Iterate through the snapshot of the balls and get their positions
+            foreach ((object Ball, Vector2 Position, Vector2 Velocity) ball in ballsSnapshot)
             {
-                Vector2 ballPosition = _dataAPI.GetBallPosition(ball);
-                positions.Add(ballPosition);
+                positions.Add(ball.Position);
             }
 
             // Raise the BallPositionsUpdated event
@@ -66,7 +68,7 @@ namespace Logic
 
             float maxDisplacement = radius * 2;
 
-            Action checkCollisionsAction = CheckCollisions;
+            Action<object, Vector2, Vector2> positionUpdatedCallback = UpdateBall;
 
             for (int row = 0; row < numRows; row++)
             {
@@ -75,12 +77,21 @@ namespace Logic
                     float x = (float)(random.NextDouble() * maxDisplacement) + col * (_table.Width - maxDisplacement) / (numCols - 1);
                     float y = (float)(random.NextDouble() * maxDisplacement) + row * (_table.Height - maxDisplacement) / (numRows - 1);
 
-                    _table.AddBall(_dataAPI.CreateBall(new Vector2(x, y), GetRandomVelocity(random) * 5, checkCollisionsAction));
+                    Vector2 pos = new Vector2(x, y);
+                    Vector2 vel = GetRandomVelocity(random) * 5;
+
+                    _table.AddBall(_dataAPI.CreateBall(pos, vel, positionUpdatedCallback), pos, vel);
                 }
             }
         }
 
-        public override void CheckCollisions()
+        private void UpdateBall(object ball, Vector2 pos, Vector2 vel)
+        {
+            _table.UpdateBall(ball, pos, vel);
+            CheckCollisions();
+        }
+
+        private void CheckCollisions()
         {
             if (_table == null)
             {
@@ -88,17 +99,19 @@ namespace Logic
                 return;
             }
 
-            foreach (var ball in _table.Balls)
+            // Create a snapshot of the balls list
+            List<(object Ball, Vector2 Position, Vector2 Velocity)> ballsSnapshot = new List<(object Ball, Vector2 Position, Vector2 Velocity)>(_table.Balls);
+
+            // Iterate through the snapshot of the balls and check collisions
+            foreach ((object Ball, Vector2 Position, Vector2 Velocity) ball in ballsSnapshot)
             {
-                Vector2 ballPosition = _dataAPI.GetBallPosition(ball);
-                Vector2 ballVelocity = _dataAPI.GetBallVelocity(ball);
-                if (ballPosition.X - _ballRadius <= 0 || ballPosition.X + _ballRadius >= _table.Width)
+                if (ball.Position.X - _ballRadius <= 0 || ball.Position.X + _ballRadius >= _table.Width)
                 {
-                    _dataAPI.SetBallVelocity(ball, new Vector2(-ballVelocity.X, ballVelocity.Y));
+                    _dataAPI.SetBallVelocity(ball.Ball, new Vector2(-ball.Velocity.X, ball.Velocity.Y));
                 }
-                if (ballPosition.Y - _ballRadius <= 0 || ballPosition.Y + _ballRadius >= _table.Height)
+                if (ball.Position.Y - _ballRadius <= 0 || ball.Position.Y + _ballRadius >= _table.Height)
                 {
-                    _dataAPI.SetBallVelocity(ball, new Vector2(ballVelocity.X, -ballVelocity.Y));
+                    _dataAPI.SetBallVelocity(ball.Ball, new Vector2(ball.Velocity.X, -ball.Velocity.Y));
                 }
             }
         }

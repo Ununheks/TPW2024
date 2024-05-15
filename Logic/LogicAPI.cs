@@ -14,6 +14,5 @@ namespace Logic
 
         public abstract void Start(int ballCount, float ballRadius, float tableWidth, float tableHeight);
         public abstract object GetTableInfo();
-        public abstract void CheckCollisions();
     }
 }
