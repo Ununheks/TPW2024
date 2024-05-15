@@ -29,9 +29,17 @@ namespace Logic
         {
             CreateTable(tableWidth, tableHeight);
             SpawnBalls(ballCount, ballRadius);
-            _updateTimer = new Timer(UpdateBallPositions, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            StartUpdateTask();
         }
 
+        private async void StartUpdateTask()
+        {
+            while (true)
+            {
+                UpdateBallPositions(null);
+                await Task.Delay(TimeSpan.FromSeconds(1f / 60f));
+            }
+        }
         private void UpdateBallPositions(object state)
         {
             List<Vector2> positions = new List<Vector2>();
@@ -78,7 +86,7 @@ namespace Logic
                     float y = (float)(random.NextDouble() * maxDisplacement) + row * (_table.Height - maxDisplacement) / (numRows - 1);
 
                     Vector2 pos = new Vector2(x, y);
-                    Vector2 vel = GetRandomVelocity(random) * 5;
+                    Vector2 vel = GetRandomVelocity(random) * 50;
 
                     _table.AddBall(_dataAPI.CreateBall(pos, vel, positionUpdatedCallback), pos, vel);
                 }
