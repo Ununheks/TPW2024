@@ -33,13 +33,16 @@ namespace Data
             {
                 stopwatch.Start();
                 await Task.Delay(TimeSpan.FromSeconds(timeStep));
-                stopwatch.Stop();
 
-                float deltaTime = (float)stopwatch.Elapsed.TotalSeconds;
-                Console.WriteLine("Delta Time: " + deltaTime);
-                _pos += _velocity * deltaTime;
+                lock(this)
+                {
+                    stopwatch.Stop();
 
-                _positionUpdatedCallback?.Invoke(this, _pos, _velocity);
+                    float deltaTime = (float)stopwatch.Elapsed.TotalSeconds;
+                    _pos += _velocity * deltaTime;
+
+                    _positionUpdatedCallback?.Invoke(this, _pos, _velocity);
+                }
 
                 stopwatch.Reset();
             }

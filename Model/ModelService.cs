@@ -49,7 +49,7 @@ namespace Model
                 _ballsList.Add(newBall); // Add the ball to the list
                 BallChanged?.Invoke(this, new BallChangeEventArgs() { Ball = newBall });
             }
-            _logicAPI.Start(ballCount, 20, 400, 420);
+            _logicAPI.Start(ballCount, 10, 400, 420);
         }
 
         public event EventHandler<BallChangeEventArgs> BallChanged;

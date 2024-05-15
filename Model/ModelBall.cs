@@ -56,8 +56,8 @@ namespace Model
 
         public void UpdatePosition(Vector2 newPosition)
         {
-            Top = newPosition.Y;
-            Left = newPosition.X;
+            Top = newPosition.Y - (Diameter / 2);
+            Left = newPosition.X - (Diameter / 2);
         }
     }
 }
