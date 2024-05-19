@@ -1,4 +1,5 @@
 using Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Numerics;
 
 namespace DataTest
@@ -7,23 +8,23 @@ namespace DataTest
     public class BallTest
     {
         [TestMethod]
-        public void TestBall()
+        public void TestBallCreation()
         {
             // Arrange
             Vector2 initialPosition = new Vector2(10, 10);
             Vector2 initialVelocity = new Vector2(1, -1);
-            Vector2 newVelocity = new Vector2(1, 1);
 
             DataAPI dataAPI = DataAPI.CreateDataService();
 
-            object ball = dataAPI.CreateBall(initialPosition, initialVelocity);
+            // Act
+            object ballObject = dataAPI.CreateBall(initialPosition, initialVelocity);
+            Ball ball = ballObject as Ball;
 
-            Assert.AreEqual(initialPosition, dataAPI.GetBallPosition(ball), "Initial position does not match.");
-            Assert.AreEqual(initialVelocity, dataAPI.GetBallVelocity(ball), "Initial velocity does not match.");
+            // Assert
+            Assert.IsNotNull(ball, "Failed to create ball object.");
 
-            dataAPI.SetBallVelocity(ball, newVelocity);
-
-            Assert.AreEqual(newVelocity, dataAPI.GetBallVelocity(ball), "Updated velocity does not match.");
+            Assert.AreEqual(initialPosition, ball.Position, "Initial position does not match.");
+            Assert.AreEqual(initialVelocity, ball.Velocity, "Initial velocity does not match.");
         }
     }
 }

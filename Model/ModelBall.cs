@@ -1,18 +1,19 @@
-﻿using Logic;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace Model
 {
     internal class ModelBall : IBall, IDisposable
     {
+        private double _scaleFactor = 1.0;
+
         public ModelBall()
         {
             Top = 0;
             Left = 0;
+            Diameter = 0;
         }
 
         public double Top
@@ -22,7 +23,7 @@ namespace Model
             {
                 if (TopBackingField == value)
                     return;
-                TopBackingField = value;
+                TopBackingField = value * _scaleFactor;
                 RaisePropertyChanged();
             }
         }
@@ -34,11 +35,22 @@ namespace Model
             {
                 if (LeftBackingField == value)
                     return;
-                LeftBackingField = value;
+                LeftBackingField = value * _scaleFactor;
                 RaisePropertyChanged();
             }
         }
-        public double Diameter { get; internal set; }
+
+        public double Diameter
+        {
+            get { return DiameterBackingField; }
+            internal set
+            {
+                if (DiameterBackingField == value)
+                    return;
+                DiameterBackingField = value * _scaleFactor;
+                RaisePropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -48,16 +60,25 @@ namespace Model
 
         private double TopBackingField;
         private double LeftBackingField;
-
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private double DiameterBackingField;
 
         public void UpdatePosition(Vector2 newPosition)
         {
             Top = newPosition.Y - (Diameter / 2);
             Left = newPosition.X - (Diameter / 2);
+        }
+
+        public void SetScaleFactor(double scaleFactor)
+        {
+            _scaleFactor = scaleFactor;
+            RaisePropertyChanged(nameof(Top));
+            RaisePropertyChanged(nameof(Left));
+            RaisePropertyChanged(nameof(Diameter));
+        }
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

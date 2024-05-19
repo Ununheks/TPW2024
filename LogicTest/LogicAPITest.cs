@@ -1,4 +1,5 @@
 using Logic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Numerics;
 
 namespace LogicTest
@@ -25,20 +26,11 @@ namespace LogicTest
 
     class MockDataAPI : Data.DataAPI
     {
-        public override object CreateBall(Vector2 pos, Vector2 velocity, Action callback = null)
+
+        public override object CreateBall(Vector2 pos, Vector2 velocity, Action<object, Vector2, Vector2> positionUpdatedCallback = null)
         {
             // For testing purposes, return an empty object
             return new object();
-        }
-
-        public override Vector2 GetBallPosition(object ball)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Vector2 GetBallVelocity(object ball)
-        {
-            throw new NotImplementedException();
         }
 
         public override void SetBallVelocity(object ball, Vector2 newVelocity)

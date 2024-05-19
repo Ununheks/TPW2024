@@ -1,8 +1,10 @@
 ﻿using Data;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Logic
 {
@@ -11,6 +13,7 @@ namespace Logic
         private DataAPI? _dataAPI;
         private Table _table;
         private float _ballRadius;
+        private float _ballMass = 1.0f; // New field for ball mass
         private Timer _updateTimer;
         private float _ballSpeed = 50f;
 
@@ -42,6 +45,7 @@ namespace Logic
                 await Task.Delay(TimeSpan.FromSeconds(1f / 60f));
             }
         }
+
         private void UpdateBallPositions(object state)
         {
             List<Vector2> positions = new List<Vector2>();
@@ -58,7 +62,6 @@ namespace Logic
             // Raise the BallPositionsUpdated event
             RaiseBallPositionsUpdated(positions);
         }
-
 
         public override object GetTableInfo()
         {
@@ -115,7 +118,7 @@ namespace Logic
             }
 
             // Check collisions with the walls
-            if (Position.X - _ballRadius <= 0 && Velocity.X < 0 || Position.X + _ballRadius >= _table.Width && Velocity.X > 0) 
+            if (Position.X - _ballRadius <= 0 && Velocity.X < 0 || Position.X + _ballRadius >= _table.Width && Velocity.X > 0)
             {
                 _dataAPI.SetBallVelocity(ball, new Vector2(-Velocity.X, Velocity.Y));
             }
@@ -152,43 +155,30 @@ namespace Logic
 
         private void ResolveBallCollision(object ball1, object ball2)
         {
-            // Get the positions and velocities of the two balls
             var (pos1, vel1) = _table.GetBall(ball1);
             var (pos2, vel2) = _table.GetBall(ball2);
 
-            // Calculate the direction from ball1 to ball2
             var direction = Vector2.Normalize(pos2 - pos1);
 
-            // Calculate the relative velocity
             var relativeVelocity = vel2 - vel1;
 
-            // Calculate the magnitude of the relative velocity along the direction of collision
             var relativeSpeed = Vector2.Dot(relativeVelocity, direction);
 
             // Check if the balls are moving towards each other
             if (relativeSpeed < 0)
             {
-                // Calculate the change in velocity for each ball
-                var velocityChange = relativeSpeed * direction;
+                var velocityChange = relativeSpeed * direction * (_ballMass / (_ballMass + _ballMass));
 
-                // Update velocities of the balls
                 var newVel1 = vel1 - velocityChange;
                 var newVel2 = vel2 + velocityChange;
 
-                // Calculate the new direction of velocities after collision
-                var newDir1 = Vector2.Normalize(newVel1);
-                var newDir2 = Vector2.Normalize(newVel2);
+                var finalVel1 = Vector2.Normalize(newVel1) * _ballSpeed;
+                var finalVel2 = Vector2.Normalize(newVel2) * _ballSpeed;
 
-                // Set the new velocity magnitude to _ballSpeed
-                var finalVel1 = newDir1 * _ballSpeed;
-                var finalVel2 = newDir2 * _ballSpeed;
-
-                // Update velocities of the balls with the new velocities
                 _dataAPI.SetBallVelocity(ball1, finalVel2);
                 _dataAPI.SetBallVelocity(ball2, finalVel1);
             }
         }
-
 
         private Vector2 GetRandomVelocity(Random random)
         {
