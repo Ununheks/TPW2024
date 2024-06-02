@@ -1,7 +1,5 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Numerics;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace Data
 {
@@ -70,6 +68,5 @@ namespace Data
                 _positionUpdatedCallback?.Invoke(this);
             }
         }
-
     }
 }

@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic
+﻿namespace Logic
 {
-    public class ImmutableVector2
+    public abstract class ImmutableVector2
     {
-        public float X { get; }
-        public float Y { get; }
-
-        internal ImmutableVector2(float x, float y)
-        {
-            X = x;
-            Y = y;
-        }
+        public abstract float X { get; }
+        public abstract float Y { get; }
     }
 }

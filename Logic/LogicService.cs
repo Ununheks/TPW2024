@@ -15,8 +15,8 @@ namespace Logic
 
         private void RaiseBallPositionUpdated(IDataBall ball)
         {
-            ImmutableVector2 immutablePosition = new ImmutableVector2(ball.Position.X, ball.Position.Y);
-            OnBallPositionUpdated?.Invoke(this, new BallPositionEventArgs(_table.GetBallIndex(ball),immutablePosition));
+            ImmutableVector2 immutablePosition = new ConcreteImmutableVector2(ball.Position.X, ball.Position.Y);
+            OnBallPositionUpdated?.Invoke(this, new ConcreteBallPositionEventArgs(_table.GetBallIndex(ball),immutablePosition));
         }
 
 

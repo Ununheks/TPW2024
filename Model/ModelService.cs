@@ -1,7 +1,6 @@
 ﻿using Logic;
 using System.Reactive;
 using System.Reactive.Linq;
-using static Logic.LogicAPI;
 
 namespace Model
 {

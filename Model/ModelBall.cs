@@ -1,7 +1,5 @@
 ﻿using Logic;
-using System;
 using System.ComponentModel;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace Model
