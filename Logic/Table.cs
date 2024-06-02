@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -8,41 +9,37 @@ namespace Logic
     {
         private float _width;
         private float _height;
-        private Dictionary<object, (Vector2 Position, Vector2 Velocity)> _balls;
+        private List<IDataBall> _balls;
 
         public float Width => _width;
         public float Height => _height;
-        public Dictionary<object, (Vector2 Position, Vector2 Velocity)> Balls => _balls;
+        public IReadOnlyList<IDataBall> Balls => _balls;
 
         public Table(float width, float height)
         {
             _width = width;
             _height = height;
-            _balls = new Dictionary<object, (Vector2 Position, Vector2 Velocity)>();
+            _balls = new List<IDataBall>();
         }
 
-        public void AddBall(object ball, Vector2 position, Vector2 velocity)
+        public void AddBall(IDataBall ball)
         {
-            _balls.Add(ball, (position, velocity));
-        }
-
-        public void UpdateBall(object ball, Vector2 newPosition, Vector2 newVelocity)
-        {
-            if (_balls.ContainsKey(ball))
+            if (!_balls.Contains(ball))
             {
-                _balls[ball] = (newPosition, newVelocity);
+                _balls.Add(ball);
             }
             else
             {
-                throw new ArgumentException("Specified ball object not found in the table.");
+                throw new ArgumentException("The ball is already present in the table.");
             }
         }
 
-        public (Vector2 Position, Vector2 Velocity) GetBall(object ball)
+        public IDataBall GetBall(IDataBall ball)
         {
-            if (_balls.ContainsKey(ball))
+            int index = _balls.IndexOf(ball);
+            if (index != -1)
             {
-                return _balls[ball];
+                return _balls[index];
             }
             else
             {
