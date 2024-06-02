@@ -11,12 +11,12 @@ namespace Logic
         private float _ballMass = 1.0f;
         private float _ballSpeed = 50f;
 
-        public override event EventHandler<ImmutableVector2> OnBallPositionUpdated;
+        public override event EventHandler<BallPositionEventArgs> OnBallPositionUpdated;
 
-        private void RaiseBallPositionUpdated(Vector2 position)
+        private void RaiseBallPositionUpdated(IDataBall ball)
         {
-            ImmutableVector2 immutablePosition = new ImmutableVector2(position.X, position.Y);
-            OnBallPositionUpdated?.Invoke(this, immutablePosition);
+            ImmutableVector2 immutablePosition = new ImmutableVector2(ball.Position.X, ball.Position.Y);
+            OnBallPositionUpdated?.Invoke(this, new BallPositionEventArgs(_table.GetBallIndex(ball),immutablePosition));
         }
 
 
@@ -74,7 +74,7 @@ namespace Logic
             {
                 CheckWallCollision(ball);
                 CheckBallCollision(ball);
-                RaiseBallPositionUpdated(ball.Position);
+                RaiseBallPositionUpdated(ball);
             }
         }
 

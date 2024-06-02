@@ -1,6 +1,7 @@
 ﻿using Logic;
 using System.Reactive;
 using System.Reactive.Linq;
+using static Logic.LogicAPI;
 
 namespace Model
 {
@@ -16,10 +17,10 @@ namespace Model
             eventObservable = Observable.FromEventPattern<BallChangeEventArgs>(this, "BallChanged");
         }
 
-        private void UpdateBallPosition(object sender, ImmutableVector2 position)
+        private void UpdateBallPosition(object sender, BallPositionEventArgs ballPosArgs)
         {
-            ModelBall ball = _ballsList[0];
-            ball.UpdatePosition(position);
+            ModelBall ball = _ballsList[ballPosArgs.Index];
+            ball.UpdatePosition(ballPosArgs.Position);
         }
 
 

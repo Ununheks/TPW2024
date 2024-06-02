@@ -4,7 +4,20 @@ namespace Logic
 {
     public abstract class LogicAPI
     {
-        public abstract event EventHandler<ImmutableVector2> OnBallPositionUpdated;
+        public abstract event EventHandler<BallPositionEventArgs> OnBallPositionUpdated;
+
+        public class BallPositionEventArgs : EventArgs
+        {
+            public int Index { get; }
+            public ImmutableVector2 Position { get; }
+
+            public BallPositionEventArgs(int index, ImmutableVector2 position)
+            {
+                Index = index;
+                Position = position;
+            }
+        }
+
 
         public static LogicAPI CreateLogicService(DataAPI dataAPI = null)
         {

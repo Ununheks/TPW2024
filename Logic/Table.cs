@@ -46,5 +46,10 @@ namespace Logic
                 throw new ArgumentException("Specified ball object not found in the table.");
             }
         }
+
+        public int GetBallIndex(IDataBall ball)
+        {
+            return _balls.IndexOf(ball);
+        }
     }
 }
