@@ -46,11 +46,5 @@ namespace LogicTest
             Velocity = velocity;
             _positionUpdatedCallback = positionUpdatedCallback;
         }
-
-        public void Move(Vector2 newPos)
-        {
-            Position = newPos;
-            _positionUpdatedCallback?.Invoke(this);
-        }
     }
 }

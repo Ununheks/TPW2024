@@ -57,8 +57,8 @@ namespace Logic
             {
                 for (int col = 0; col < numCols; col++)
                 {
-                    float x = (float)(random.NextDouble() * maxDisplacement) + col * (_table.Width - maxDisplacement) / (numCols - 1);
-                    float y = (float)(random.NextDouble() * maxDisplacement) + row * (_table.Height - maxDisplacement) / (numRows - 1);
+                    float x = (float)(random.NextDouble() * maxDisplacement) + col * (_table.Width - maxDisplacement) / ((numCols > 1) ? (numCols - 1) : numCols);
+                    float y = (float)(random.NextDouble() * maxDisplacement) + row * (_table.Height - maxDisplacement) / ((numRows > 1) ? (numRows - 1) : numRows);
 
                     Vector2 pos = new Vector2(x, y);
                     Vector2 vel = GetRandomVelocity(random) * _ballSpeed;
