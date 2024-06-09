@@ -1,7 +1,5 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Numerics;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace Data
 {
@@ -68,7 +66,7 @@ namespace Data
                     _pos += _vel * (float)(stopwatch.Elapsed - previousTime).TotalSeconds;
                 }
 
-                _logger.CreateLog(new LogEntry(_pos, _vel, DateTime.Now));
+                _logger.CreateLog(new BallLogEntry(_pos, _vel));
 
                 _positionUpdatedCallback?.Invoke(this, _pos, _vel);
             }

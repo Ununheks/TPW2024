@@ -26,7 +26,7 @@ namespace LogicTest
 
     class MockDataAPI : Data.DataAPI
     {
-        public override IDataBall CreateBall(Vector2 pos, Vector2 velocity, Action<IDataBall> positionUpdatedCallback = null)
+        public override IDataBall CreateBall(Vector2 pos, Vector2 velocity, Action<IDataBall, Vector2, Vector2> positionUpdatedCallback = null)
         {
             // For testing purposes, return a mock implementation of IDataBall
             return new MockDataBall(pos, velocity, positionUpdatedCallback);
@@ -38,9 +38,9 @@ namespace LogicTest
         public Vector2 Position { get; private set; }
         public Vector2 Velocity { get; set; }
 
-        private readonly Action<IDataBall> _positionUpdatedCallback;
+        private readonly Action<IDataBall, Vector2, Vector2> _positionUpdatedCallback;
 
-        public MockDataBall(Vector2 pos, Vector2 velocity, Action<IDataBall> positionUpdatedCallback)
+        public MockDataBall(Vector2 pos, Vector2 velocity, Action<IDataBall, Vector2, Vector2> positionUpdatedCallback)
         {
             Position = pos;
             Velocity = velocity;

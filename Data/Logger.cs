@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Numerics;
-using System.Text.Json;
-using System.Threading;
+﻿using System.Collections.Concurrent;
 
 namespace Data
 {
@@ -11,16 +7,10 @@ namespace Data
         private static Logger _instance;
         private static readonly object _lock = new object();
         private ConcurrentQueue<LogEntry> _logQueue = new ConcurrentQueue<LogEntry>();
-        private bool _loggingEnabled = true;
         private string _logFilePath = "log.json";
-        private Thread _loggingThread;
-
-        // Private constructor to prevent instantiation
-        private Logger()
-        {
-            _loggingThread = new Thread(ProcessLogs);
-            _loggingThread.Start();
-        }
+        private Task _loggingTask;
+        private int _maxQueueSize = 101;
+        bool _queueFullWarning = false;
 
         public static Logger GetInstance()
         {
@@ -36,22 +26,32 @@ namespace Data
 
         public void CreateLog(LogEntry entry)
         {
-            _logQueue.Enqueue(entry);
+            lock (_lock)
+            {
+                if (_logQueue.Count < _maxQueueSize-1)
+                {
+                    _logQueue.Enqueue(entry);
+                    _queueFullWarning = false;
+
+                    if (_loggingTask == null || _loggingTask.IsCompleted)
+                    {
+                        _loggingTask = Task.Run(ProcessLogs);
+                    }
+                }
+                else if(!_queueFullWarning)
+                {
+                    var stringLogEntry = new StringLogEntry("Queue full", entry.Timestamp);
+                    _logQueue.Enqueue(stringLogEntry);
+                    _queueFullWarning = true;
+                }
+            }
         }
 
-        private void ProcessLogs()
+        private async Task ProcessLogs()
         {
-            while (_loggingEnabled)
+            while (_logQueue.TryDequeue(out LogEntry entry))
             {
-                if (_logQueue.TryDequeue(out LogEntry entry))
-                {
-                    WriteLogToFile(entry);
-                }
-                else
-                {
-                    // Sleep for a short period if the queue is empty
-                    Thread.Sleep(10);
-                }
+                WriteLogToFile(entry);
             }
         }
 
@@ -67,18 +67,6 @@ namespace Data
                 // Handle exceptions by issuing a warning
                 System.Diagnostics.Debug.WriteLine($"Warning: Error writing log - {ex.Message}");
             }
-        }
-
-
-        public void StopLogging()
-        {
-            _loggingEnabled = false;
-        }
-
-        public void Dispose()
-        {
-            _loggingEnabled = false;
-            _loggingThread.Join();
         }
     }
 }
