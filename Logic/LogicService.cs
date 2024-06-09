@@ -13,9 +13,9 @@ namespace Logic
 
         public override event EventHandler<BallPositionEventArgs> OnBallPositionUpdated;
 
-        private void RaiseBallPositionUpdated(IDataBall ball)
+        private void RaiseBallPositionUpdated(IDataBall ball, Vector2 pos)
         {
-            ImmutableVector2 immutablePosition = new ConcreteImmutableVector2(ball.Position.X, ball.Position.Y);
+            ImmutableVector2 immutablePosition = new ConcreteImmutableVector2(pos.X, pos.Y);
             OnBallPositionUpdated?.Invoke(this, new ConcreteBallPositionEventArgs(_table.GetBallIndex(ball),immutablePosition));
         }
 
@@ -51,7 +51,7 @@ namespace Logic
 
             float maxDisplacement = radius * 2;
 
-            Action<IDataBall> positionUpdatedCallback = UpdateBall;
+            Action<IDataBall, Vector2, Vector2> positionUpdatedCallback = UpdateBall;
 
             for (int row = 0; row < numRows; row++)
             {
@@ -68,17 +68,17 @@ namespace Logic
             }
         }
 
-        private void UpdateBall(IDataBall ball)
+        private void UpdateBall(IDataBall ball, Vector2 pos, Vector2 vel)
         {
             lock (this)
             {
-                CheckWallCollision(ball);
+                CheckWallCollision(ball,pos,vel);
                 CheckBallCollision(ball);
-                RaiseBallPositionUpdated(ball);
+                RaiseBallPositionUpdated(ball, pos);
             }
         }
 
-        private void CheckWallCollision(IDataBall ball)
+        private void CheckWallCollision(IDataBall ball, Vector2 pos, Vector2 vel)
         {
             if (_table == null)
             {
@@ -86,18 +86,15 @@ namespace Logic
                 return;
             }
 
-            Vector2 position = ball.Position;
-            Vector2 velocity = ball.Velocity;
-
             // Check collisions with the walls
-            if (position.X - _ballRadius <= 0 && velocity.X < 0 || position.X + _ballRadius >= _table.Width && velocity.X > 0)
+            if (pos.X - _ballRadius <= 0 && vel.X < 0 || pos.X + _ballRadius >= _table.Width && vel.X > 0)
             {
-                ball.Velocity = new Vector2(-velocity.X, velocity.Y);
+                ball.Velocity = new Vector2(-vel.X, vel.Y);
             }
 
-            if (position.Y - _ballRadius <= 0 && velocity.Y < 0 || position.Y + _ballRadius >= _table.Height && velocity.Y > 0)
+            if (pos.Y - _ballRadius <= 0 && vel.Y < 0 || pos.Y + _ballRadius >= _table.Height && vel.Y > 0)
             {
-                ball.Velocity = new Vector2(velocity.X, -velocity.Y);
+                ball.Velocity = new Vector2(vel.X, -vel.Y);
             }
         }
 
