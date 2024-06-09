@@ -4,11 +4,11 @@ namespace Data
 {
     internal class Logger
     {
-        private static Logger _instance;
+        private static Logger? _instance;
         private static readonly object _lock = new object();
         private ConcurrentQueue<LogEntry> _logQueue = new ConcurrentQueue<LogEntry>();
         private string _logFilePath = "log.json";
-        private Task _loggingTask;
+        private Task? _loggingTask;
         private int _maxQueueSize = 101;
         bool _queueFullWarning = false;
 
@@ -51,16 +51,17 @@ namespace Data
         {
             while (_logQueue.TryDequeue(out LogEntry entry))
             {
-                WriteLogToFile(entry);
+                await WriteLogToFileAsync(entry);
             }
         }
 
-        private void WriteLogToFile(LogEntry entry)
+        private async Task WriteLogToFileAsync(LogEntry entry)
         {
             try
             {
                 string jsonString = entry.ToString();
-                File.AppendAllText(_logFilePath, jsonString + Environment.NewLine);
+                // Use asynchronous file writing
+                await File.AppendAllTextAsync(_logFilePath, jsonString + Environment.NewLine);
             }
             catch (Exception ex)
             {
