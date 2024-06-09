@@ -10,7 +10,7 @@ namespace Data
         private string _logFilePath = "log.json";
         private Task? _loggingTask;
         private int _maxQueueSize = 101;
-        bool _queueFullWarning = false;
+        private bool _queueFullWarning = false;
 
         public static Logger GetInstance()
         {
