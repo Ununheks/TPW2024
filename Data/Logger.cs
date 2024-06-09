@@ -60,12 +60,10 @@ namespace Data
             try
             {
                 string jsonString = entry.ToString();
-                // Use asynchronous file writing
                 await File.AppendAllTextAsync(_logFilePath, jsonString + Environment.NewLine);
             }
             catch (Exception ex)
             {
-                // Handle exceptions by issuing a warning
                 System.Diagnostics.Debug.WriteLine($"Warning: Error writing log - {ex.Message}");
             }
         }
